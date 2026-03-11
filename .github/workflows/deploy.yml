@@ -13,9 +13,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
-      - run: npm install
-      - run: npm run build -- --public-path /${{ github.event.repository.name }}/
+          node-version: 16 # Original code needs this older version to work
+      - name: Install and Build
+        run: |
+          npm install
+          NODE_OPTIONS=--openssl-legacy-provider npm run build -- --public-path /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
