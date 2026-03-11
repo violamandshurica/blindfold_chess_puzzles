@@ -13,17 +13,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 16
+          node-version: 20 # 最新の安定版に変更
       - name: Force Build
         run: |
-          # 古いキャッシュやエラーの元（lockファイル）を削除
           rm -f package-lock.json
-          # 期限切れの中国サーバー(taobao)設定を公式サーバーに強制上書き
           npm config set registry https://registry.npmjs.org
-          # 依存関係を無視してインストール
           npm install --legacy-peer-deps
-          # ビルド実行
-          export NODE_OPTIONS=--openssl-legacy-provider
+          # エラーの元だった NODE_OPTIONS を削除してビルド
           npm run build -- --public-path /${{ github.event.repository.name }}/
       - uses: actions/upload-pages-artifact@v3
         with:
