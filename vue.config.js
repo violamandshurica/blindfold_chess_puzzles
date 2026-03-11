@@ -1,4 +1,5 @@
 module.exports = {
+  publicPath: "/blindfold_chess_puzzles/",
   transpileDependencies: ['vuetify'],
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg');
