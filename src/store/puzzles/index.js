@@ -99,48 +99,49 @@ export default {
       const puzzles = require('../../data/puzzles_alg.json');
       commit('updatePuzzles', { puzzles });
     },
-getRandomPuzzleFromFilteredPuzzles({ state, commit }) {
-  let filteredPuzzles = state.puzzles.filter((puzzle) => {
-    const ratingOk =
-      puzzle.rating >= state.ratingRange[0] &&
-      puzzle.rating <= state.ratingRange[1];
+    getRandomPuzzleFromFilteredPuzzles({ state, commit }) {
+      let filteredPuzzles = state.puzzles.filter((puzzle) => {
+        const ratingOk =
+          puzzle.rating >= state.ratingRange[0] &&
+          puzzle.rating <= state.ratingRange[1];
 
-    const piecesCountOk =
-      puzzle.number_of_pieces >= state.numberOfPiecesRange[0] &&
-      puzzle.number_of_pieces <= state.numberOfPiecesRange[1];
+        const piecesCountOk =
+          puzzle.number_of_pieces >= state.numberOfPiecesRange[0] &&
+          puzzle.number_of_pieces <= state.numberOfPiecesRange[1];
 
-    const sideOk =
-      state.sideFilter === 'any' || puzzle.active === state.sideFilter;
+        const sideOk =
+          state.sideFilter === 'any' || puzzle.active === state.sideFilter;
 
-    const presentPieces = Object.keys(puzzle.positions);
+        const presentPieces = Object.keys(puzzle.positions);
 
-    const includeOk = state.pieceFilters.include.every((piece) =>
-      presentPieces.includes(piece)
-    );
+        const includeOk = state.pieceFilters.include.every((piece) =>
+          presentPieces.includes(piece)
+        );
 
-    const excludeOk = !state.pieceFilters.exclude.some((piece) =>
-      presentPieces.includes(piece)
-    );
+        const excludeOk = !state.pieceFilters.exclude.some((piece) =>
+          presentPieces.includes(piece)
+        );
 
-    return ratingOk && piecesCountOk && sideOk && includeOk && excludeOk;
-  });
+        return ratingOk && piecesCountOk && sideOk && includeOk && excludeOk;
+      });
 
-  if (filteredPuzzles.length == 0) {
-    commit('updateNoPuzzles', true);
-    commit('updateActivePuzzleExists', false);
-  } else {
-    let activePuzzle =
-      filteredPuzzles[Math.floor(Math.random() * filteredPuzzles.length)];
+      if (filteredPuzzles.length == 0) {
+        commit('updateNoPuzzles', true);
+        commit('updateActivePuzzleExists', false);
+      } else {
+        let activePuzzle =
+          filteredPuzzles[Math.floor(Math.random() * filteredPuzzles.length)];
 
-    commit('closeOpenedFilterPanel');
-    commit('updateNoPuzzles', false);
-    commit('updateSolutionVisible', false);
-    commit('updateActivePuzzle', activePuzzle);
-    commit('cleanPlayerWrongAnswers');
-    commit('updatePlayerSolution', '');
-    commit('cleanPlayerCorrect');
-  }
-},
+        commit('closeOpenedFilterPanel');
+        commit('updateNoPuzzles', false);
+        commit('updateSolutionVisible', false);
+        commit('updateActivePuzzle', activePuzzle);
+        commit('cleanPlayerWrongAnswers');
+        commit('updatePlayerSolution', '');
+        commit('cleanPlayerCorrect');
+      }
+    },
+  },
   getters: {
     noPuzzles: (state) => {
       return state.noPuzzles;
