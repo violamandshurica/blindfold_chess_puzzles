@@ -84,48 +84,53 @@
               </v-row>
             </v-card-text>
           </v-card>
-          
-<v-card flat color="transparent">
-  <v-subheader>Side to Move</v-subheader>
-  <v-card-text>
-    <v-btn-toggle v-model="sideFilter" mandatory>
-      <v-btn value="any">Any</v-btn>
-      <v-btn value="w">White</v-btn>
-      <v-btn value="b">Black</v-btn>
-    </v-btn-toggle>
-  </v-card-text>
-</v-card>
 
-<v-card flat color="transparent">
-  <v-subheader>Pieces on board (check = must include, tap again = exclude)</v-subheader>
-  <v-card-text>
-    <v-row>
-      <v-col
-        v-for="piece in pieceList"
-        :key="piece.key"
-        cols="6"
-        sm="4"
-        class="py-1"
-      >
-        <div class="d-flex align-center">
-          <span class="mr-2" style="width: 110px">{{ piece.label }}</span>
-          <v-checkbox
-            :input-value="isIncluded(piece.key)"
-            label="Include"
-            hide-details
-            dense
-            class="mt-0 mr-2"
-            @change="togglePieceFilter(piece.key, 'include')"
-          ></v-checkbox>
-          <v-checkbox
-            :input-value="isExcluded(piece.key)"
-            label="Exclude"
-            hide-details
-            dense
-            class="mt-0"
-            @change="togglePieceFilter(piece.key, 'exclude')"
-          ></v-checkbox>
-        </div>
+          <v-card flat color="transparent">
+            <v-subheader>Side to Move</v-subheader>
+            <v-card-text>
+              <v-btn-toggle v-model="sideFilter" mandatory>
+                <v-btn value="any">Any</v-btn>
+                <v-btn value="w">White</v-btn>
+                <v-btn value="b">Black</v-btn>
+              </v-btn-toggle>
+            </v-card-text>
+          </v-card>
+
+          <v-card flat color="transparent">
+            <v-subheader
+              >Pieces on board (check = must include, tap again =
+              exclude)</v-subheader
+            >
+            <v-card-text>
+              <v-row>
+                <v-col
+                  v-for="piece in pieceList"
+                  :key="piece.key"
+                  cols="6"
+                  sm="4"
+                  class="py-1"
+                >
+                  <div class="d-flex align-center">
+                    <span class="mr-2" style="width: 110px">{{
+                      piece.label
+                    }}</span>
+                    <v-checkbox
+                      :input-value="isIncluded(piece.key)"
+                      label="Include"
+                      hide-details
+                      dense
+                      class="mt-0 mr-2"
+                      @change="togglePieceFilter(piece.key, 'include')"
+                    ></v-checkbox>
+                    <v-checkbox
+                      :input-value="isExcluded(piece.key)"
+                      label="Exclude"
+                      hide-details
+                      dense
+                      class="mt-0"
+                      @change="togglePieceFilter(piece.key, 'exclude')"
+                    ></v-checkbox>
+                  </div>
                 </v-col>
               </v-row>
             </v-card-text>
