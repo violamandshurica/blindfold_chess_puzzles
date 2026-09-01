@@ -154,35 +154,25 @@ import { mapGetters } from 'vuex';
 
 export default {
   name: 'Test',
-  computed: {
-    sideFilter: {
-    get() {
-      return this.$store.state.puzzles.sideFilter;
-    },
-    set(value) {
-      this.$store.commit('puzzles/updateSideFilter', value);
-    },
+  data() {
+    return {
+      pieceList: [
+        { key: 'K', label: 'White King' },
+        { key: 'Q', label: 'White Queen' },
+        { key: 'R', label: 'White Rook' },
+        { key: 'B', label: 'White Bishop' },
+        { key: 'N', label: 'White Knight' },
+        { key: 'P', label: 'White Pawn' },
+        { key: 'k', label: 'Black King' },
+        { key: 'q', label: 'Black Queen' },
+        { key: 'r', label: 'Black Rook' },
+        { key: 'b', label: 'Black Bishop' },
+        { key: 'n', label: 'Black Knight' },
+        { key: 'p', label: 'Black Pawn' },
+      ],
+    };
   },
-  ...mapGetters('puzzles', ['activePuzzleExists', 'noPuzzles']),
-},
-data() {
-  return {
-    pieceList: [
-      { key: 'K', label: 'White King' },
-      { key: 'Q', label: 'White Queen' },
-      { key: 'R', label: 'White Rook' },
-      { key: 'B', label: 'White Bishop' },
-      { key: 'N', label: 'White Knight' },
-      { key: 'P', label: 'White Pawn' },
-      { key: 'k', label: 'Black King' },
-      { key: 'q', label: 'Black Queen' },
-      { key: 'r', label: 'Black Rook' },
-      { key: 'b', label: 'Black Bishop' },
-      { key: 'n', label: 'Black Knight' },
-      { key: 'p', label: 'Black Pawn' },
-    ],
-  };
-},
+  computed: {
     ratingRange: {
       get() {
         return this.$store.state.puzzles.ratingRange;
@@ -207,45 +197,51 @@ data() {
         this.$store.commit('puzzles/updateNumberOfPiecesRange', range);
       },
     },
+    sideFilter: {
+      get() {
+        return this.$store.state.puzzles.sideFilter;
+      },
+      set(value) {
+        this.$store.commit('puzzles/updateSideFilter', value);
+      },
+    },
     ...mapGetters('puzzles', ['activePuzzleExists', 'noPuzzles']),
   },
   methods: {
-    
-  isIncluded(key) {
-    return this.$store.state.puzzles.pieceFilters.include.includes(key);
-  },
-  isExcluded(key) {
-    return this.$store.state.puzzles.pieceFilters.exclude.includes(key);
-  },
-  togglePieceFilter(key, mode) {
-    // mode: 'include' or 'exclude'
-    const current = { ...this.$store.state.puzzles.pieceFilters };
-    const include = [...current.include];
-    const exclude = [...current.exclude];
+    isIncluded(key) {
+      return this.$store.state.puzzles.pieceFilters.include.includes(key);
+    },
+    isExcluded(key) {
+      return this.$store.state.puzzles.pieceFilters.exclude.includes(key);
+    },
+    togglePieceFilter(key, mode) {
+      // mode: 'include' or 'exclude'
+      const current = { ...this.$store.state.puzzles.pieceFilters };
+      const include = [...current.include];
+      const exclude = [...current.exclude];
 
-    if (mode === 'include') {
-      const idx = include.indexOf(key);
-      if (idx >= 0) {
-        include.splice(idx, 1);
+      if (mode === 'include') {
+        const idx = include.indexOf(key);
+        if (idx >= 0) {
+          include.splice(idx, 1);
+        } else {
+          include.push(key);
+          const exIdx = exclude.indexOf(key);
+          if (exIdx >= 0) exclude.splice(exIdx, 1); // 排他制御
+        }
       } else {
-        include.push(key);
-        const exIdx = exclude.indexOf(key);
-        if (exIdx >= 0) exclude.splice(exIdx, 1); // 排他制御
+        const idx = exclude.indexOf(key);
+        if (idx >= 0) {
+          exclude.splice(idx, 1);
+        } else {
+          exclude.push(key);
+          const inIdx = include.indexOf(key);
+          if (inIdx >= 0) include.splice(inIdx, 1); // 排他制御
+        }
       }
-    } else {
-      const idx = exclude.indexOf(key);
-      if (idx >= 0) {
-        exclude.splice(idx, 1);
-      } else {
-        exclude.push(key);
-        const inIdx = include.indexOf(key);
-        if (inIdx >= 0) include.splice(inIdx, 1); // 排他制御
-      }
-    }
 
-    this.$store.commit('puzzles/updatePieceFilters', { include, exclude });
-  },
-},
+      this.$store.commit('puzzles/updatePieceFilters', { include, exclude });
+    },
     playPuzzle() {
       this.$store.commit('puzzles/updatePuzzleSolved', false);
       this.$store.dispatch('puzzles/getRandomPuzzleFromFilteredPuzzles');
