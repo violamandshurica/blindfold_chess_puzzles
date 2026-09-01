@@ -3,11 +3,11 @@ export default {
   state: {
     openedFilterPanel: [0],
     ratingRange: [800, 1500],
-    numberOfPiecesRange: [4, 7],    
-    sideFilter: 'any', 
+    numberOfPiecesRange: [4, 7],
+    sideFilter: 'any',
     pieceFilters: {
-    include: [],
-    exclude: [],
+      include: [],
+      exclude: [],
     },
     puzzles: [],
     noPuzzles: false,
